@@ -1,4 +1,0 @@
-Goals and shots on target are useful stats for judging forwards,
-but they are not accurate on other roles.
-
-Move to the position that connects attack and defense.

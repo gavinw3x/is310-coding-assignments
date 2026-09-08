@@ -1,4 +1,0 @@
-A player's statistics are influenced by position, tactics, teammates, and many other factors.
-
-The final answer is hidden.
-Use what you know about hidden files and directories

@@ -1,4 +1,0 @@
-Congrats! You have found the solution of this maze
-
-The answer is:
-Different positions require different statistics to evaluate performance.
