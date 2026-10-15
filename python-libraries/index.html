@@ -1,0 +1,178 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EA FC Player Data Curation</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+    <main class="container">
+        <header class="page-header">
+            <p class="eyebrow">IS 310 · CULTURE AS DATA</p>
+            <h1>EA FC Player Data Curation</h1>
+            <p class="intro">
+                How does a video game represent soccer players
+                through numbers? EA FC assigns players overall
+                ratings based on their in-game abilities.
+                Contribute player records to explore this system.
+            </p>
+        </header>
+
+        <div class="layout">
+            <section class="card">
+                <h2>Add a Player</h2>
+                <p class="description">
+                    Enter a player's information below.
+                    Review your entry before adding it.
+                </p>
+
+                <form id="player-form">
+                    <label for="name">Player Name *</label>
+                    <p class="hint">The player's full name.</p>
+                    <input id="name" type="text"
+                           placeholder="e.g., Jamal Musiala"
+                           required>
+
+                    <label for="club">Club *</label>
+                    <p class="hint">
+                        The soccer team the player represents.
+                    </p>
+                    <input id="club" type="text"
+                           placeholder="e.g., Bayern Munich"
+                           required>
+
+                    <label for="position">Position *</label>
+                    <p class="hint">The player's role on the field.</p>
+                    <select id="position" required>
+                        <option value="">Select a position</option>
+                        <option value="GK">GK - Goalkeeper</option>
+                        <option value="CB">CB - Center Back</option>
+                        <option value="LB">LB - Left Back</option>
+                        <option value="RB">RB - Right Back</option>
+                        <option value="CDM">CDM - Defensive Midfielder</option>
+                        <option value="CM">CM - Central Midfielder</option>
+                        <option value="CAM">CAM - Attacking Midfielder</option>
+                        <option value="LM">LM - Left Midfielder</option>
+                        <option value="RM">RM - Right Midfielder</option>
+                        <option value="LW">LW - Left Winger</option>
+                        <option value="RW">RW - Right Winger</option>
+                        <option value="ST">ST - Striker</option>
+                    </select>
+
+                    <details class="help">
+                        <summary>Not familiar with positions?</summary>
+                        <p>
+                            Goalkeepers protect the goal.
+                            Defenders stop opposing attacks.
+                            Midfielders connect defense and attack.
+                            Wingers play on the sides.
+                            Strikers focus on scoring goals.
+                        </p>
+                    </details>
+
+                    <label for="overall">Overall Rating *</label>
+                    <p class="hint">
+                        EA FC uses a 0–99 numerical scale.
+                        Higher ratings represent stronger
+                        in-game abilities.
+                    </p>
+                    <input id="overall" type="number"
+                           min="0" max="99" step="1"
+                           placeholder="e.g., 87"
+                           required>
+
+                    <p id="form-message"
+                       class="message"
+                       role="status"></p>
+
+                    <button class="primary" type="submit">
+                        Review Entry →
+                    </button>
+                </form>
+
+                <section id="review-panel" class="review" hidden>
+                    <h3>Review Your Entry</h3>
+                    <p>Check the information before confirming.</p>
+
+                    <dl>
+                        <dt>Player</dt><dd id="review-name"></dd>
+                        <dt>Club</dt><dd id="review-club"></dd>
+                        <dt>Position</dt><dd id="review-position"></dd>
+                        <dt>Overall</dt><dd id="review-overall"></dd>
+                    </dl>
+
+                    <div class="button-row">
+                        <button id="edit-button" class="secondary"
+                                type="button">Edit</button>
+                        <button id="confirm-button" class="primary"
+                                type="button">Confirm Player</button>
+                    </div>
+                </section>
+            </section>
+
+            <div class="right-column">
+                <section class="card">
+                    <h2>Example Dataset</h2>
+                    <p class="description">
+                        Illustrative player ratings for demonstration.
+                        These are not verified against a specific
+                        EA FC edition.
+                    </p>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Player</th>
+                                    <th>Club</th>
+                                    <th>POS</th>
+                                    <th>OVR</th>
+                                </tr>
+                            </thead>
+                            <tbody id="example-body"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="card">
+                    <h2>Your Dataset <span id="count">0</span></h2>
+                    <p class="description">
+                        Only confirmed entries appear here.
+                    </p>
+
+                    <p id="empty-state" class="empty">
+                        No players added yet.
+                    </p>
+
+                    <div id="confirmed-table" class="table-wrapper"
+                         hidden>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Player</th>
+                                    <th>Club</th>
+                                    <th>POS</th>
+                                    <th>OVR</th>
+                                </tr>
+                            </thead>
+                            <tbody id="confirmed-body"></tbody>
+                        </table>
+                    </div>
+
+                    <button id="download-button" class="primary"
+                            type="button" disabled>
+                        Download JSON ↓
+                    </button>
+                </section>
+            </div>
+        </div>
+
+        <footer>
+            IS 310 · Command Line Data Curation · HTML Interface
+        </footer>
+    </main>
+</body>
+</html>
