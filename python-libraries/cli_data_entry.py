@@ -26,39 +26,53 @@ players = [
     }
 ]
 
-# Store newly confirmed player entries
+# Store newly confirmed player entries separately
 new_entries = []
 
 
 # ==========================================
-# 2. Display Existing Player Data
+# 2. Reusable Table Function
 # ==========================================
 
-console.print("\n[bold cyan]EA FC Player Ratings Database[/bold cyan]")
+def show_players_table(player_list, title):
+    """Display player data in a formatted Rich table."""
 
-table = Table(title="Existing Player Data")
+    table = Table(title=title)
 
-table.add_column("Player Name", style="cyan")
-table.add_column("Club", style="magenta")
-table.add_column("Position", style="green")
-table.add_column("Overall", justify="right")
+    table.add_column("Player Name", style="cyan")
+    table.add_column("Club", style="magenta")
+    table.add_column("Position", style="green")
+    table.add_column("Overall", justify="right")
 
-for player in players:
-    table.add_row(
-        player["name"],
-        player["club"],
-        player["position"],
-        str(player["overall"])
-    )
+    for player in player_list:
+        table.add_row(
+            player["name"],
+            player["club"],
+            player["position"],
+            str(player["overall"])
+        )
 
-console.print(table)
+    console.print(table)
 
 
 # ==========================================
-# 3. Instructions for New Users
+# 3. Display Existing Player Data
 # ==========================================
 
-console.print("\n[bold cyan]Welcome to EA FC Data Entry![/bold cyan]")
+console.print(
+    "\n[bold cyan]EA FC Player Ratings Database[/bold cyan]"
+)
+
+show_players_table(players, "Existing Player Data")
+
+
+# ==========================================
+# 4. Instructions for New Users
+# ==========================================
+
+console.print(
+    "\n[bold cyan]Welcome to EA FC Data Entry![/bold cyan]"
+)
 
 console.print(
     "EA FC is a soccer video game that assigns numerical "
@@ -73,22 +87,22 @@ console.print(
 
 
 # ==========================================
-# 4. Helper Function for User Input
+# 5. Helper Function for User Input
 # ==========================================
 
 def ask_field(label, example, help_text):
+    """Ask for a required field and provide optional help."""
+
     while True:
         answer = console.input(
             f"[bold]{label}[/bold] "
             f"[dim](e.g., {example}; ? for help)[/dim]: "
         ).strip()
 
-        # Show help if requested
         if answer.lower() in ("?", "help"):
             console.print(f"[cyan]{help_text}[/cyan]")
             continue
 
-        # Prevent empty input
         if not answer:
             console.print(
                 "[red]This field cannot be empty.[/red]"
@@ -99,10 +113,12 @@ def ask_field(label, example, help_text):
 
 
 # ==========================================
-# 5. Validate Overall Rating
+# 6. Validate Overall Rating
 # ==========================================
 
 def ask_rating():
+    """Collect a whole-number rating between 0 and 99."""
+
     while True:
         answer = ask_field(
             "Overall Rating (0-99)",
@@ -123,7 +139,7 @@ def ask_rating():
 
 
 # ==========================================
-# 6. Collect and Confirm New Player Data
+# 7. Collect and Confirm New Player Data
 # ==========================================
 
 console.print(
@@ -132,7 +148,7 @@ console.print(
 
 while True:
 
-    # Keep collecting until the user confirms
+    # Repeat data entry until the user confirms
     while True:
 
         name = ask_field(
@@ -160,6 +176,7 @@ while True:
             "CDM = Defensive Midfielder\n"
             "CM = Central Midfielder\n"
             "CAM = Attacking Midfielder\n"
+            "LM/RM = Left/Right Midfielder\n"
             "LW/RW = Left/Right Winger\n"
             "ST = Striker"
         ).upper()
@@ -174,15 +191,17 @@ while True:
             "overall": overall
         }
 
-        # Show the entry for review
+        # Display the entry for review
         console.print(
             "\n[bold yellow]Review Your Entry[/bold yellow]"
         )
 
-        for field, value in new_player.items():
-            console.print(f"{field.title()}: ", value)
+        show_players_table(
+            [new_player],
+            "Pending Player Entry"
+        )
 
-        # Ask for confirmation
+        # Ask the user to confirm the entry
         while True:
             confirm = console.input(
                 "\nIs this information correct? (y/n): "
@@ -196,20 +215,57 @@ while True:
             )
 
         if confirm in ("y", "yes"):
+
+            # Add the confirmed player to both lists
             players.append(new_player)
             new_entries.append(new_player)
 
             console.print(
-                "\n[green]Player confirmed successfully![/green]"
+                "\n[bold green]"
+                "Player confirmed successfully!"
+                "[/bold green]"
             )
+
+            # ==================================
+            # Table 1: Newly Added Players
+            # ==================================
+
+            console.print(
+                f"\n[bold cyan]"
+                f"Newly Added Players ({len(new_entries)})"
+                f"[/bold cyan]"
+            )
+
+            show_players_table(
+                new_entries,
+                "Session Additions"
+            )
+
+            # ==================================
+            # Table 2: Full Updated Dataset
+            # ==================================
+
+            console.print(
+                f"\n[bold cyan]"
+                f"Full Updated Dataset ({len(players)})"
+                f"[/bold cyan]"
+            )
+
+            show_players_table(
+                players,
+                "All Player Records"
+            )
+
             break
 
         else:
             console.print(
-                "\n[yellow]Let's re-enter the player information.[/yellow]\n"
+                "\n[yellow]"
+                "Let's re-enter the player information."
+                "[/yellow]\n"
             )
 
-    # Ask whether to continue
+    # Ask whether to add another player
     while True:
         another = console.input(
             "\nWould you like to add another player? (y/n): "
@@ -227,21 +283,34 @@ while True:
 
 
 # ==========================================
-# 7. Save Confirmed Data to JSON
+# 8. Final Session Summary
 # ==========================================
 
 console.print(
-    f"\n[bold green]Total players: {len(players)}[/bold green]"
+    "\n[bold cyan]Session Summary[/bold cyan]"
 )
+
+console.print(
+    f"New players added: [green]{len(new_entries)}[/green]"
+)
+
+console.print(
+    f"Total players displayed: [green]{len(players)}[/green]"
+)
+
+
+# ==========================================
+# 9. Save Confirmed Data to JSON
+# ==========================================
 
 if new_entries:
 
-    # Save in the same folder as this script
+    # Save the file in the same folder as this script
     output_path = (
         Path(__file__).resolve().parent / "sample_data.json"
     )
 
-    # Convert confirmed entries into JSON
+    # Save only newly confirmed entries
     with open(output_path, "w", encoding="utf-8") as file:
         json.dump(
             new_entries,
@@ -267,7 +336,14 @@ else:
         "\n[yellow]No new players to save.[/yellow]"
     )
 
+
+# ==========================================
+# 10. Exit Message
+# ==========================================
+
 console.print(
-    "\n[bold cyan]Thank you for contributing to the "
-    "EA FC Player Ratings dataset![/bold cyan]"
+    "\n[bold cyan]"
+    "Thank you for contributing to the "
+    "EA FC Player Ratings dataset!"
+    "[/bold cyan]"
 )
